@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rxdart_app/bloc/obscure_text.dart';
 import 'package:rxdart_app/utils/accent_color_override.dart';
 import 'package:rxdart_app/utils/colors.dart';
 
@@ -14,6 +15,7 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   final _usernameController = TextEditingController();
   final _passwordController = TextEditingController();
+  ObscureTextBloc _bloc = ObscureTextBloc();
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +25,7 @@ class _LoginPageState extends State<LoginPage> {
           padding: EdgeInsets.symmetric(horizontal: 24.0),
           children: <Widget>[
             SizedBox(
-              height: 120.0,
+              height: 80.0,
             ),
             Column(
               children: <Widget>[
@@ -39,21 +41,38 @@ class _LoginPageState extends State<LoginPage> {
               child: TextField(
                 controller: _usernameController,
                 decoration: InputDecoration(
-                  labelText: 'Username',
-                ),
+                    labelText: 'Username *',
+                    hintText: 'Enter with your username.'),
               ),
             ),
             SizedBox(height: 12.0),
             AccentColorOverride(
               color: brown900,
-              child: TextField(
-                controller: _passwordController,
-                decoration: InputDecoration(
-                  labelText: 'Password',
-                ),
-                obscureText: true,
-              ),
+              child: StreamBuilder<bool>(
+                  stream: _bloc.obscureTextValueStream,
+                  initialData: _bloc.obscureText,
+                  builder: (context, snapshot) {
+                    return TextField(
+                      controller: _passwordController,
+                      obscureText: snapshot.data,
+                      maxLength: 8,
+                      decoration: InputDecoration(
+                        labelText: 'Password *',
+                        hintText: 'Enter with your password.',
+                        helperText: 'No more than 8 characters.',
+                        suffixIcon: GestureDetector(
+                          onTap: () {
+                            _bloc.changeObscureText();
+                          },
+                          child: Icon(snapshot.data
+                              ? Icons.visibility
+                              : Icons.visibility_off),
+                        ),
+                      ),
+                    );
+                  }),
             ),
+            SizedBox(height: 16.0),
             ButtonBar(
               children: <Widget>[
                 FlatButton(
@@ -80,7 +99,7 @@ class _LoginPageState extends State<LoginPage> {
               ],
             ),
             SizedBox(
-              height: 32.0,
+              height: 12.0,
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -88,12 +107,16 @@ class _LoginPageState extends State<LoginPage> {
                 Center(
                   child: Text('Don\'t have an account?'),
                 ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 4.0),
+                FlatButton(
                   child: Text(
                     'Sign Up',
                     style: TextStyle(color: brown400),
+
                   ),
+                  shape: BeveledRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(7.0)),
+                  ),
+                  onPressed: () {},
                 ),
               ],
             )
@@ -101,5 +124,11 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _bloc.dispose();
+    super.dispose();
   }
 }
