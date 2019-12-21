@@ -25,7 +25,7 @@ class _LoginPageState extends State<LoginPage> {
           padding: EdgeInsets.symmetric(horizontal: 24.0),
           children: <Widget>[
             SizedBox(
-              height: 80.0,
+              height: 24.0,
             ),
             Column(
               children: <Widget>[
@@ -35,7 +35,7 @@ class _LoginPageState extends State<LoginPage> {
                 SizedBox(height: 16.0),
               ],
             ),
-            SizedBox(height: 32.0),
+            SizedBox(height: 16.0),
             AccentColorOverride(
               color: brown900,
               child: TextField(
@@ -45,7 +45,7 @@ class _LoginPageState extends State<LoginPage> {
                     hintText: 'Enter with your username.'),
               ),
             ),
-            SizedBox(height: 12.0),
+            SizedBox(height: 8.0),
             AccentColorOverride(
               color: brown900,
               child: StreamBuilder<bool>(
@@ -72,34 +72,33 @@ class _LoginPageState extends State<LoginPage> {
                     );
                   }),
             ),
-            SizedBox(height: 16.0),
-            ButtonBar(
-              children: <Widget>[
-                FlatButton(
-                  child: Text(
-                    'Forgot Password?',
-                    style: TextStyle(color: brown400),
+            Container(
+              padding: EdgeInsets.only(top: 16.0),
+              child: ButtonBar(
+                children: <Widget>[
+                  OutlineButton(
+                    child: Text(
+                      'Forgot Password?',
+                      style: TextStyle(color: brown400),
+                    ),
+                    shape: BeveledRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(7.0)),
+                    ),
+                    onPressed: () {
+                      _usernameController.clear();
+                      _passwordController.clear();
+                    },
                   ),
-                  shape: BeveledRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(7.0)),
+                  RaisedButton(
+                    child: Text('Sign in'),
+                    elevation: 8.0,
+                    shape: BeveledRectangleBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(7.0)),
+                    ),
+                    onPressed: () {},
                   ),
-                  onPressed: () {
-                    _usernameController.clear();
-                    _passwordController.clear();
-                  },
-                ),
-                RaisedButton(
-                  child: Text('Sign in'),
-                  elevation: 8.0,
-                  shape: BeveledRectangleBorder(
-                    borderRadius: BorderRadius.all(Radius.circular(7.0)),
-                  ),
-                  onPressed: () {},
-                ),
-              ],
-            ),
-            SizedBox(
-              height: 12.0,
+                ],
+              ),
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
@@ -110,13 +109,17 @@ class _LoginPageState extends State<LoginPage> {
                 FlatButton(
                   child: Text(
                     'Sign Up',
-                    style: TextStyle(color: brown400),
-
+                    style: TextStyle(
+                      color: brown400,
+                      decoration: TextDecoration.underline,
+                    ),
                   ),
                   shape: BeveledRectangleBorder(
                     borderRadius: BorderRadius.all(Radius.circular(7.0)),
                   ),
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.pushNamed(context, '/signup');
+                  },
                 ),
               ],
             )

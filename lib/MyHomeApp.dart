@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:rxdart_app/signup/signup_page.dart';
 import 'package:rxdart_app/utils/colors.dart';
 import 'package:rxdart_app/utils/cut_corner_border.dart';
 
@@ -16,6 +17,9 @@ class _MyHomeAppState extends State<MyHomeApp> {
       title: 'My Home',
       debugShowCheckedModeBanner: false,
       initialRoute: '/login',
+      routes: {
+        '/signup': (context) => SignUpPage(),
+      },
       onGenerateRoute: _getRoute,
       theme: _buildMyHomeTheme(),
     );
